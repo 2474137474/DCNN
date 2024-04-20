@@ -266,3 +266,5 @@ if __name__ == '__main__':
     fea_t = torch.randn(7,7,512)
     loss_kd_feature = loss_kd_feature(fea_s, fea_t)
     print(loss_kd_feature)
+
+# 这是一个修改
