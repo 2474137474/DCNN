@@ -26,19 +26,26 @@ def train(epoch,model_s,model_t):
 
     for batch_index, (images, labels) in enumerate(cifar100_training_loader):
 
-        labels = labels.cuda()
-        images = images.cuda()
+        # labels = labels.cuda()
+        # images = images.cuda()
 
+        output_s, final_fea_s, \
+        middle_fea_s_3, middle_fea_s_4, middle_fea_s_5, \
+        middle_output_s_3, middle_output_s_4, middle_output_s_5 = model_s(images)
 
-        output_s,middle_fea_s,middle_out_s = model_s(images)
-        output_t,middle_fea_t,middle_out_t = model_t(images)
+        output_t, final_fea_t, \
+        middle_fea_t_3, middle_fea_t_4, middle_fea_t_5, \
+        middle_output_t_3, middle_output_t_4, middle_output_t_5 = model_t(images)
+
+        # output_s,middle_fea_s,middle_out_s = model_s(images)
+        # output_t,middle_fea_t,middle_out_t = model_t(images)
         loss_s = loss_function_s(output_s, labels) # 这里CrossEntropyLoss()包含了logsoftmax+NllLoss
         loss_t = loss_function_t(output_t, labels)
 
         # 教师与学生输出层(未经过softmax)的KL散度Loss
-        middle_out_loss = loss_kd_output(middle_out_s,middle_out_t,t=args.t) 
+        middle_out_loss = loss_kd_output(output_s,output_t,t=args.t)
         # 教师与学生 全连接层前的特征图 之间的Loss(借鉴自蒸馏损失的写法)
-        middle_fea_loss = loss_kd_feature(middle_fea_s,middle_fea_t)
+        middle_fea_loss = loss_kd_feature(middle_fea_s_5,middle_fea_t_5)
 
         # 总loss，包括L(FL) + L(KL) + L(L2)
         total_loss = loss_s + loss_t + middle_out_loss + middle_fea_loss
@@ -63,11 +70,11 @@ def train(epoch,model_s,model_t):
         ))
 
         # tensorboard 记录相关信息
-        writer.add_scalar('Train_loss_s', loss_s.item(), n_iter)
-        writer.add_scalar('Train_loss_t', loss_t.item(), n_iter)
-        writer.add_scalar('Train_loss_total', total_loss.item(), n_iter)
-        writer.add_scalar('Middle_out_loss', middle_out_loss.item(), n_iter)
-        writer.add_scalar('Middle_fea_loss', middle_fea_loss.item(), n_iter)
+        # writer.add_scalar('Train_loss_s', loss_s.item(), n_iter)
+        # writer.add_scalar('Train_loss_t', loss_t.item(), n_iter)
+        # writer.add_scalar('Train_loss_total', total_loss.item(), n_iter)
+        # writer.add_scalar('Middle_out_loss', middle_out_loss.item(), n_iter)
+        # writer.add_scalar('Middle_fea_loss', middle_fea_loss.item(), n_iter)
 
         if epoch <= args.warm:
             warmup_scheduler_s.step()
@@ -118,10 +125,10 @@ def eval(model_s,model_t):
         100. * correct_t / len(cifar100_test_loader.dataset)
     ))
 
-    writer.add_scalar('Test_loss_s', test_loss_s / len(cifar100_test_loader.dataset), epoch)
-    writer.add_scalar('Test_Acc_s', correct_s.float() / len(cifar100_test_loader.dataset), epoch)
-    writer.add_scalar('Test_loss_t', test_loss_t / len(cifar100_test_loader.dataset), epoch)
-    writer.add_scalar('Test_Acc_t', correct_t.float() / len(cifar100_test_loader.dataset), epoch)
+    # writer.add_scalar('Test_loss_s', test_loss_s / len(cifar100_test_loader.dataset), epoch)
+    # writer.add_scalar('Test_Acc_s', correct_s.float() / len(cifar100_test_loader.dataset), epoch)
+    # writer.add_scalar('Test_loss_t', test_loss_t / len(cifar100_test_loader.dataset), epoch)
+    # writer.add_scalar('Test_Acc_t', correct_t.float() / len(cifar100_test_loader.dataset), epoch)
 
 
     return correct_s.float() / len(cifar100_test_loader.dataset), correct_t.float() / len(cifar100_test_loader.dataset)
@@ -145,8 +152,9 @@ if __name__ == '__main__':
 
     model_s,model_t = get_networks(args)
 
-    args.device = torch.device(f'cuda:{args.GPU_num}')
-    torch.cuda.set_device(args.device)
+    # args.device = torch.device(f'cuda:{args.GPU_num}')
+    # torch.cuda.set_device(args.device)
+    args.device = torch.device('cpu')
 
     model_s = model_s.to(args.device)
     model_t = model_t.to(args.device)
@@ -196,10 +204,10 @@ if __name__ == '__main__':
     # 获取权重保存路径
     checkpoint_path_s, checkpoint_path_t = get_checkpoint_path(settings, args)
     # 获取tensorboard路径
-    writer = SummaryWriter(log_dir=os.path.join(settings.LOG_DIR, args.stu+'-'+args.tea, settings.TIME_NOW))
-    input_tensor = torch.Tensor(1,3,224,224).cuda()
-    writer.add_graph(model_s, input_tensor)
-    writer.add_graph(model_t, input_tensor)
+    # writer = SummaryWriter(log_dir=os.path.join(settings.LOG_DIR, args.stu+'-'+args.tea, settings.TIME_NOW))
+    input_tensor = torch.Tensor(1,3,224,224).to(args.device)
+    # writer.add_graph(model_s, input_tensor)
+    # writer.add_graph(model_t, input_tensor)
 
 
 
@@ -230,7 +238,7 @@ if __name__ == '__main__':
         print('max_stu_acc:', best_acc_s)
         print('max_tea_acc:', best_acc_t)
 
-    writer.close()
+    # writer.close()
 
     
 

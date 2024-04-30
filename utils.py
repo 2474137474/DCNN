@@ -47,7 +47,7 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
 
     ])
     #cifar100_training = CIFAR100Train(path, transform=transform_train)
-    cifar100_training = torchvision.datasets.CIFAR100(root='/attached/remote-home2/xt/Experiment/pytorch-cifar100/data', train=True, download=True, transform=transform_train)
+    cifar100_training = torchvision.datasets.CIFAR100(root='../data', train=True, download=True, transform=transform_train)
     cifar100_training_loader = DataLoader(
         cifar100_training, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
@@ -71,7 +71,7 @@ def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
         transforms.Resize((224, 224))
     ])
     #cifar100_test = CIFAR100Test(path, transform=transform_test)
-    cifar100_test = torchvision.datasets.CIFAR100(root='/attached/remote-home2/xt/Experiment/pytorch-cifar100/data', train=False, download=True, transform=transform_test)
+    cifar100_test = torchvision.datasets.CIFAR100(root='../data', train=False, download=True, transform=transform_test)
     cifar100_test_loader = DataLoader(
         cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
 
@@ -178,7 +178,7 @@ def best_acc_weights(weights_folder):
 def cal_para_flops(model):
     from thop import profile
     from thop import clever_format
-    input = torch.rand(1, 3, 224, 224).to("cuda")
+    input = torch.rand(1, 3, 224, 224).to("cpu")
     flops, params = profile(model, inputs=(input,))
     flops, params = clever_format([flops, params], "%.3f")
     print(flops, params)
@@ -223,15 +223,15 @@ def get_checkpoint_path(settings, args):
     checkpoint_path_t = os.path.join(checkpoint_path_t, '{net}-{epoch}-{type}-{acc:0.2f}.pth')
     return checkpoint_path_s, checkpoint_path_t
 
-if __name__ == '__main__':
-    # output_s = torch.tensor([[0.9,0.05, 0.8]]) * 10
-    # output_t = torch.tensor([[0.1, 0.1, 0.8]]) * 10
-    # loss_kd_output = loss_kd_output(output_s, output_t, 3)
-    # print(loss_kd_output)
-
-    # 生成两个有正有负的tensor
-    fea_s = torch.randn(7,7,512)
-    fea_t = torch.randn(7,7,512)
-    loss_kd_feature = loss_kd_feature(fea_s, fea_t)
-    print(loss_kd_feature)
+# if __name__ == '__main__':
+#     # output_s = torch.tensor([[0.9,0.05, 0.8]]) * 10
+#     # output_t = torch.tensor([[0.1, 0.1, 0.8]]) * 10
+#     # loss_kd_output = loss_kd_output(output_s, output_t, 3)
+#     # print(loss_kd_output)
+#
+#     # 生成两个有正有负的tensor
+#     fea_s = torch.randn(7,7,512)
+#     fea_t = torch.randn(7,7,512)
+#     loss_kd_feature = loss_kd_feature(fea_s, fea_t)
+#     print(loss_kd_feature)
 

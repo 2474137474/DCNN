@@ -12,6 +12,24 @@ import torch
 import torch.nn as nn
 
 
+# 自蒸馏模块的bottleneck
+def branchBottleNeck(channel_in, channel_out, kernel_size, **kwargs):
+    middle_channel = channel_out // 4
+    return nn.Sequential(
+        nn.Conv2d(channel_in, middle_channel, kernel_size=1, stride=1),
+        nn.BatchNorm2d(middle_channel),
+        nn.ReLU(),
+
+        nn.Conv2d(middle_channel, middle_channel, kernel_size=kernel_size, stride=kernel_size, **kwargs),
+        nn.BatchNorm2d(middle_channel),
+        nn.ReLU(),
+
+        nn.Conv2d(middle_channel, channel_out, kernel_size=1, stride=1),
+        nn.BatchNorm2d(channel_out),
+        nn.ReLU(),
+    )
+
+
 class DepthSeperabelConv2d(nn.Module):
 
     def __init__(self, input_channels, output_channels, kernel_size, **kwargs):
@@ -251,21 +269,55 @@ class MobileNet(nn.Module):
        self.fc = nn.Linear(int(2048 * alpha), class_num)
        self.avg = nn.AdaptiveAvgPool2d(1)
 
+       self.avgpool1 = nn.AdaptiveAvgPool2d(1)
+       self.avgpool2 = nn.AdaptiveAvgPool2d(1)
+       self.avgpool3 = nn.AdaptiveAvgPool2d(1)
+       self.avgpool4 = nn.AdaptiveAvgPool2d(1)
+       self.avgpool5 = nn.AdaptiveAvgPool2d(1)
+       self.bottleneck1 = branchBottleNeck(int(128 * alpha), int(1024 * alpha), 3, padding=0) # 64,512
+       self.bottleneck2 = branchBottleNeck(int(256 * alpha), int(1024 * alpha), 3, padding=0) # 128,512
+       self.bottleneck3 = branchBottleNeck(int(512 * alpha), int(4096 * alpha), 8, padding=1) # 256,2048
+       self.bottleneck4 = branchBottleNeck(int(1024 * alpha), int(4096 * alpha), 4, padding=1) # 512,2048
+       self.bottleneck5 = branchBottleNeck(int(2048 * alpha), int(4096 * alpha), 2, padding=0) # 1024,2048
+       self.middle_fc1 = nn.Linear(512,class_num)
+       self.middle_fc2 = nn.Linear(512,class_num)
+       self.middle_fc3 = nn.Linear(2048,class_num)
+       self.middle_fc4 = nn.Linear(2048,class_num)
+       self.middle_fc5 = nn.Linear(2048,class_num)
+
+
     def forward(self, x):
         x = self.stem(x)
 
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
-        x = self.conv4(x)
-        x = self.conv5(x)
+        middle_output3 = self.bottleneck3(x)
+        middle_output3 = self.avgpool3(middle_output3)
+        middle_fea_3 = middle_output3
+        middle_output3 = torch.flatten(middle_output3, 1)
+        middle_output3 = self.middle_fc3(middle_output3)
 
-        middle_fea = x
+        x = self.conv4(x)
+        middle_output4 = self.bottleneck4(x)
+        middle_output4 = self.avgpool4(middle_output4)
+        middle_fea_4 = middle_output4
+        middle_output4 = torch.flatten(middle_output4, 1)
+        middle_output4 = self.middle_fc4(middle_output4)
+
+        x = self.conv5(x)
+        middle_output5 = self.bottleneck5(x)
+        middle_output5 = self.avgpool5(middle_output5)
+        middle_fea_5 = middle_output5
+        middle_output5 = torch.flatten(middle_output5, 1)
+        middle_output5 = self.middle_fc5(middle_output5)
+
         x = self.avg(x)
+        final_fea = x
+
         x = x.view(x.size(0), -1)
         x = self.fc(x)
-        middle_output = x
-        return x,middle_fea,middle_output
+        return x, final_fea, middle_fea_3,middle_fea_4,middle_fea_5, middle_output3,middle_output4,middle_output5
 
 
 def mobilenet_1_0(alpha=0.5, class_num=100):
@@ -275,7 +327,9 @@ if __name__ == "__main__":
     model = mobilenet_1_0()
     print(model)
     input = torch.rand(1,3,224,224)
-    output,_,_ = model(input)
+    output, final_fea, \
+    middle_fea_3, middle_fea_4, middle_fea_5, \
+    middle_output3, middle_output4, middle_output5 = model(input)
     print(output.size())
 
     # 计算该网络的参数量
