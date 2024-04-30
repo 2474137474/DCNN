@@ -221,6 +221,7 @@ class MobileNet(nn.Module):
                int(1024 * alpha),
                int(2048 * alpha),
                3,
+               stride=2,
                padding=1,
                bias=False
            ),
@@ -230,10 +231,24 @@ class MobileNet(nn.Module):
             3,
             padding=1,
             bias=False
-          )
+          ),
+          DepthSeperabelConv2d(
+            int(2048 * alpha),
+            int(2048 * alpha),
+            3,
+            padding=1,
+            bias=False
+          ),
+          DepthSeperabelConv2d(
+            int(2048 * alpha),
+            int(2048 * alpha),
+            3,
+            padding=1,
+            bias=False
+          ),
        )
 
-       self.fc = nn.Linear(int(1024 * alpha), class_num)
+       self.fc = nn.Linear(int(2048 * alpha), class_num)
        self.avg = nn.AdaptiveAvgPool2d(1)
 
     def forward(self, x):
@@ -243,7 +258,8 @@ class MobileNet(nn.Module):
         x = self.conv2(x)
         x = self.conv3(x)
         x = self.conv4(x)
-        # x = self.conv5(x)
+        x = self.conv5(x)
+
         middle_fea = x
         x = self.avg(x)
         x = x.view(x.size(0), -1)
@@ -259,7 +275,7 @@ if __name__ == "__main__":
     model = mobilenet_1_0()
     print(model)
     input = torch.rand(1,3,224,224)
-    output = model(input)
+    output,_,_ = model(input)
     print(output.size())
 
     # 计算该网络的参数量

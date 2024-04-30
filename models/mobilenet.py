@@ -209,3 +209,20 @@ class MobileNet(nn.Module):
 def mobilenet(alpha=1, class_num=100):
     return MobileNet(alpha, class_num)
 
+if __name__ == '__main__':
+    import torch
+    GPU_num = 0
+    device = torch.device(f"cuda:{GPU_num}")
+    torch.cuda.set_device(device)
+    model = mobilenet(alpha=1, class_num=200).to(device)#这里的mobilenet是cifar100设计的，只进行了4次下采样，所以flops非常大
+    print(model)
+    random_input = torch.randn(1,3,224,224).to(device)
+    output = model(random_input)
+    print(output.shape)
+
+    # 计算该网络的参数量
+    from thop import profile
+    from thop import clever_format
+    flops, params = profile(model, inputs=(random_input, ))
+    flops, params = clever_format([flops, params], "%.3f")
+    print(flops, params)
