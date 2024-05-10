@@ -7,6 +7,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -14,6 +15,8 @@
       </list>
     </option>
   </component>
+=======
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -29,12 +32,20 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+<<<<<<< HEAD
     "last_opened_file_path": "C:/Users/dell/PycharmProjects/pythonProject/科研相关/分布式网络设计",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RunManager" selected="Python.inference">
     <configuration name="DCNN_cloud" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    "last_opened_file_path": "C:/Users/dell/PycharmProjects/pythonProject/科研相关/分布式网络设计"
+  }
+}]]></component>
+  <component name="RunManager" selected="Python.kd">
+    <configuration name="MobileNet_0_5" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       <module name="DCNN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -46,7 +57,11 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/DCNN_cloud.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/MobileNet_0_5.py" />
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -55,7 +70,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="DCNN_terminal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="MobileNet_1_0_modified" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       <module name="DCNN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -67,7 +86,11 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/DCNN_terminal.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/MobileNet_1_0_modified.py" />
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -76,6 +99,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="SA-Net" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DCNN" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -98,6 +122,9 @@
       <method v="2" />
     </configuration>
     <configuration name="inference" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="kd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       <module name="DCNN" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -109,6 +136,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/inference.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -131,6 +159,9 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/inference_s和t都为0_5.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kd.py" />
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -141,11 +172,17 @@
     </configuration>
     <recent_temporary>
       <list>
+<<<<<<< HEAD
         <item itemvalue="Python.inference" />
         <item itemvalue="Python.DCNN_cloud" />
         <item itemvalue="Python.DCNN_terminal" />
         <item itemvalue="Python.SA-Net" />
         <item itemvalue="Python.inference_s和t都为0_5 (1)" />
+=======
+        <item itemvalue="Python.kd" />
+        <item itemvalue="Python.MobileNet_1_0_modified" />
+        <item itemvalue="Python.MobileNet_0_5" />
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
       </list>
     </recent_temporary>
   </component>
@@ -175,6 +212,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+<<<<<<< HEAD
           <url>file://$PROJECT_DIR$/inference.py</url>
           <line>133</line>
           <option name="timeStamp" value="48" />
@@ -187,6 +225,18 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
+=======
+          <url>file://$PROJECT_DIR$/models/MobileNet_0_5.py</url>
+          <line>249</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/models/MobileNet_1_0_modified.py</url>
+          <line>294</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
     </breakpoint-manager>
   </component>
 </project>

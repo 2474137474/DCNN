@@ -11,22 +11,23 @@
 import torch
 import torch.nn as nn
 
+
 # 自蒸馏模块的bottleneck
 def branchBottleNeck(channel_in, channel_out, kernel_size, **kwargs):
-    middle_channel = channel_out//4
+    middle_channel = channel_out // 4
     return nn.Sequential(
         nn.Conv2d(channel_in, middle_channel, kernel_size=1, stride=1),
         nn.BatchNorm2d(middle_channel),
         nn.ReLU(),
-        
+
         nn.Conv2d(middle_channel, middle_channel, kernel_size=kernel_size, stride=kernel_size, **kwargs),
         nn.BatchNorm2d(middle_channel),
         nn.ReLU(),
-        
+
         nn.Conv2d(middle_channel, channel_out, kernel_size=1, stride=1),
         nn.BatchNorm2d(channel_out),
         nn.ReLU(),
-        )
+    )
 
 
 class DepthSeperabelConv2d(nn.Module):
@@ -156,35 +157,35 @@ class MobileNet(nn.Module):
                3,
                padding=1,
                bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(512 * alpha),
+               int(512 * alpha),
+               3,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(512 * alpha),
+               int(512 * alpha),
+               3,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(512 * alpha),
+               int(512 * alpha),
+               3,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(512 * alpha),
+               int(512 * alpha),
+               3,
+               padding=1,
+               bias=False
            )
-        #    DepthSeperabelConv2d(
-        #        int(512 * alpha),
-        #        int(512 * alpha),
-        #        3,
-        #        padding=1,
-        #        bias=False
-        #    ),
-        #    DepthSeperabelConv2d(
-        #        int(512 * alpha),
-        #        int(512 * alpha),
-        #        3,
-        #        padding=1,
-        #        bias=False
-        #    ),
-        #    DepthSeperabelConv2d(
-        #        int(512 * alpha),
-        #        int(512 * alpha),
-        #        3,
-        #        padding=1,
-        #        bias=False
-        #    ),
-        #    DepthSeperabelConv2d(
-        #        int(512 * alpha),
-        #        int(512 * alpha),
-        #        3,
-        #        padding=1,
-        #        bias=False
-        #    )
        )
 
        #downsample
@@ -194,6 +195,34 @@ class MobileNet(nn.Module):
                int(1024 * alpha),
                3,
                stride=2,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(1024 * alpha),
+               int(1024 * alpha),
+               3,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(1024 * alpha),
+               int(1024 * alpha),
+               3,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(1024 * alpha),
+               int(1024 * alpha),
+               3,
+               padding=1,
+               bias=False
+           ),
+           DepthSeperabelConv2d(
+               int(1024 * alpha),
+               int(1024 * alpha),
+               3,
                padding=1,
                bias=False
            ),
@@ -214,18 +243,32 @@ class MobileNet(nn.Module):
                padding=1,
                bias=False
            ),
-           DepthSeperabelConv2d(
-               int(2048 * alpha),
-               int(2048 * alpha),
-               3,
-               padding=1,
-               bias=False
-           )
+          DepthSeperabelConv2d(
+            int(2048 * alpha),
+            int(2048 * alpha),
+            3,
+            padding=1,
+            bias=False
+          ),
+          DepthSeperabelConv2d(
+            int(2048 * alpha),
+            int(2048 * alpha),
+            3,
+            padding=1,
+            bias=False
+          ),
+          DepthSeperabelConv2d(
+            int(2048 * alpha),
+            int(2048 * alpha),
+            3,
+            padding=1,
+            bias=False
+          ),
        )
-
 
        self.fc = nn.Linear(int(2048 * alpha), class_num)
        self.avg = nn.AdaptiveAvgPool2d(1)
+
        self.avgpool1 = nn.AdaptiveAvgPool2d(1)
        self.avgpool2 = nn.AdaptiveAvgPool2d(1)
        self.avgpool3 = nn.AdaptiveAvgPool2d(1)
@@ -241,33 +284,14 @@ class MobileNet(nn.Module):
        self.middle_fc3 = nn.Linear(2048,class_num)
        self.middle_fc4 = nn.Linear(2048,class_num)
        self.middle_fc5 = nn.Linear(2048,class_num)
-    def forward(self, x):
-<<<<<<< HEAD
-        import matplotlib.pyplot as plt
-        plt.subplot(1,2,1)
-        x_batch = x[0,:,:,:].permute(1,2,0)
-        plt.imshow(x_batch)
-        plt.show()
 
-=======
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
+
+    def forward(self, x):
         x = self.stem(x)
+
         x = self.conv1(x)
         x = self.conv2(x)
-
         x = self.conv3(x)
-<<<<<<< HEAD
-        x_transfer = x.detach()
-
-        # 可视化中间特征
-        images_batch = x_transfer
-        images = images_batch[0,0:3,:].permute(1,2,0)
-        plt.subplot(1, 2, 2)
-        plt.imshow(images)
-        plt.show()
-
-=======
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
         middle_output3 = self.bottleneck3(x)
         middle_output3 = self.avgpool3(middle_output3)
         middle_fea_3 = middle_output3
@@ -293,27 +317,19 @@ class MobileNet(nn.Module):
 
         x = x.view(x.size(0), -1)
         x = self.fc(x)
-<<<<<<< HEAD
-        # return x, final_fea, middle_fea_3,middle_fea_4,middle_fea_5, \
-        #        middle_output3,middle_output4,middle_output5, \
-        #        x_transfer
-        return x, x_transfer
-=======
         return x, final_fea, middle_fea_3,middle_fea_4,middle_fea_5, middle_output3,middle_output4,middle_output5
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
 
 
-
-def mobilenet_0_5(alpha=0.5, class_num=100):
+def mobilenet_1_0(alpha=0.5, class_num=100):
     return MobileNet(alpha, class_num)
 
 if __name__ == "__main__":
-    model = mobilenet_0_5()
+    model = mobilenet_1_0()
     print(model)
     input = torch.rand(1,3,224,224)
     output, final_fea, \
-    middle_fea_3,middle_fea_4,middle_fea_5,\
-    middle_output3,middle_output4,middle_output5 = model(input)
+    middle_fea_3, middle_fea_4, middle_fea_5, \
+    middle_output3, middle_output4, middle_output5 = model(input)
     print(output.size())
 
     # 计算该网络的参数量
@@ -322,3 +338,4 @@ if __name__ == "__main__":
     flops, params = profile(model, inputs=(input, ))
     flops, params = clever_format([flops, params], "%.3f")
     print(flops, params)
+

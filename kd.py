@@ -47,6 +47,7 @@ def train(epoch,model_s,model_t):
         # 教师与学生 全连接层前的特征图 之间的Loss(借鉴自蒸馏损失的写法)
         middle_fea_loss = loss_kd_feature(middle_fea_s_5,middle_fea_t_5)
 
+<<<<<<< HEAD
         # # 总loss，包括L(FL) + L(KL) + L(L2)
         # total_loss = loss_s + loss_t + middle_out_loss + middle_fea_loss
 
@@ -62,6 +63,14 @@ def train(epoch,model_s,model_t):
         loss_t.backward()
 
 
+=======
+        # 总loss，包括L(FL) + L(KL) + L(L2)
+        total_loss = loss_s + loss_t + middle_out_loss + middle_fea_loss
+
+        optimizer_s.zero_grad()
+        optimizer_t.zero_grad()
+        total_loss.backward()
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
         optimizer_s.step()
         optimizer_t.step()
 
@@ -74,7 +83,11 @@ def train(epoch,model_s,model_t):
             total_samples=len(cifar100_training_loader.dataset),
             stu_loss = loss_s.item(),
             tea_loss = loss_t.item(),
+<<<<<<< HEAD
             total_loss = loss_s.item()+loss_t.item(),
+=======
+            total_loss = total_loss.item(),
+>>>>>>> 086bb67504fca0476fac0854675b1d8768343506
             LR=optimizer_s.param_groups[0]['lr'],
         ))
 
