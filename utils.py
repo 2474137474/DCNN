@@ -19,7 +19,6 @@ def get_networks(args):
         from models import mobilenet_1_0
         net_stu = mobilenet_0_5(class_num=100)
         net_tea = mobilenet_1_0(class_num=100)
-<<<<<<< HEAD
         return net_stu, net_tea
     if args.stu == "MobileNet_1_0" and args.tea == "MobileNet_1_0":
         from models import mobilenet_1_0
@@ -28,14 +27,12 @@ def get_networks(args):
         return net_stu
 
 
-=======
     if args.stu == "MobileNet" and args.tea == "MobileNet_1_0":
         from models import mobilenet
         from models import mobilenet_1_0
         net_stu = mobilenet(class_num=100)
         net_tea = mobilenet_1_0(class_num=100)
     return net_stu, net_tea
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
 
 def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
     """ return training dataloader

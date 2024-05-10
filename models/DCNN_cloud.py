@@ -257,7 +257,7 @@ class DCNN(nn.Module):
         x = self.sa2(x)
         x = self.block_2_3(x)
         x = self.sa3(x)
-        'SC-T1~3'
+        'SC-E1~2'
         x = self.sc_e1(x)
         x = self.sc_e2(x)
         'Classifier'

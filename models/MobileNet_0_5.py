@@ -242,21 +242,17 @@ class MobileNet(nn.Module):
        self.middle_fc4 = nn.Linear(2048,class_num)
        self.middle_fc5 = nn.Linear(2048,class_num)
     def forward(self, x):
-<<<<<<< HEAD
         import matplotlib.pyplot as plt
         plt.subplot(1,2,1)
         x_batch = x[0,:,:,:].permute(1,2,0)
         plt.imshow(x_batch)
         plt.show()
 
-=======
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
         x = self.stem(x)
         x = self.conv1(x)
         x = self.conv2(x)
 
         x = self.conv3(x)
-<<<<<<< HEAD
         x_transfer = x.detach()
 
         # 可视化中间特征
@@ -266,8 +262,6 @@ class MobileNet(nn.Module):
         plt.imshow(images)
         plt.show()
 
-=======
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
         middle_output3 = self.bottleneck3(x)
         middle_output3 = self.avgpool3(middle_output3)
         middle_fea_3 = middle_output3
@@ -293,14 +287,11 @@ class MobileNet(nn.Module):
 
         x = x.view(x.size(0), -1)
         x = self.fc(x)
-<<<<<<< HEAD
         # return x, final_fea, middle_fea_3,middle_fea_4,middle_fea_5, \
         #        middle_output3,middle_output4,middle_output5, \
         #        x_transfer
         return x, x_transfer
-=======
-        return x, final_fea, middle_fea_3,middle_fea_4,middle_fea_5, middle_output3,middle_output4,middle_output5
->>>>>>> 086bb67504fca0476fac0854675b1d8768343506
+        # return x, final_fea, middle_fea_3,middle_fea_4,middle_fea_5, middle_output3,middle_output4,middle_output5
 
 
 
